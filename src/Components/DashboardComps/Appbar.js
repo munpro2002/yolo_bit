@@ -15,14 +15,16 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const Appbar = () => {
+const Appbar = (props) => {
   const { collapseSidebar } = useProSidebar();
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState("Dashboard");
 
   return (
     <Sidebar
       transitionDuration={800}
       rootStyles={{
+        position: "fixed",
+        zIndex: 10,
         height: "100vh",
         "& > .ps-sidebar-container": {
           backgroundColor: "#263544",
@@ -34,6 +36,9 @@ const Appbar = () => {
         <MenuItem
           rootStyles={{
             ["." + menuClasses.button]: {
+              height: "70px !important",
+              boxShadow: "0 0px 2px 0 rgba(0, 0, 0, 0.6)",
+              marginBottom: "16px",
               "&:hover": {
                 backgroundColor: "unset !important",
                 color: "white",
@@ -42,6 +47,7 @@ const Appbar = () => {
           }}
           icon={<MenuOutlined />}
           onClick={() => {
+            props.openAppBar();
             collapseSidebar();
           }}
         >
@@ -51,6 +57,7 @@ const Appbar = () => {
         <MenuItem
           onClick={() => {
             setSelected("Dashboard");
+            props.selected("Dashboard");
           }}
           rootStyles={{
             ["." + menuClasses.button]: {
@@ -72,6 +79,7 @@ const Appbar = () => {
         <MenuItem
           onClick={() => {
             setSelected("Temperature");
+            props.selected("Temperature");
           }}
           rootStyles={{
             ["." + menuClasses.button]: {
@@ -93,6 +101,7 @@ const Appbar = () => {
         <MenuItem
           onClick={() => {
             setSelected("Humidity");
+            props.selected("Humidity");
           }}
           rootStyles={{
             ["." + menuClasses.button]: {
@@ -114,6 +123,7 @@ const Appbar = () => {
         <MenuItem
           onClick={() => {
             setSelected("Light");
+            props.selected("Light");
           }}
           rootStyles={{
             ["." + menuClasses.button]: {

@@ -15,9 +15,15 @@ import {
 
 import { Lock } from "@mui/icons-material";
 import loginBackground from "../../Assets/image/login.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const handleSubmit = () => {};
+  const navigate = useNavigate();
+
+  const formSubmitHanlder = (e) => {
+    e.preventDefault();
+    navigate("/dashboard");
+  };
 
   return (
     <Grid
@@ -67,7 +73,7 @@ const Login = () => {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={formSubmitHanlder}
             sx={{ mt: 1 }}
           >
             <TextField

@@ -1,0 +1,19 @@
+.container {
+  height: 70px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.6);
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  transition: all ease 800ms;
+  background-color: white;
+
+  & .content {
+    padding-top: 16px;
+    margin: 0 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+    gap: 2rem;
+  }
+}

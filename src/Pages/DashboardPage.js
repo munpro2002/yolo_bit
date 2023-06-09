@@ -2,8 +2,16 @@ import React, { useState } from "react";
 import Appbar from "../Components/DashboardComps/Appbar";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../Components/DashboardComps/Navbar";
-import TemperatureControl from "../Components/DashboardComps/TemperatureControl";
 import Dashboard from "../Components/DashboardComps/Dashboard";
+import ElementControl from "../Components/DashboardComps/ElementControl";
+import {
+  TemperatureData,
+  TemperatureOptions,
+  HumidityData,
+  HumidityOptions,
+  LightOptions,
+  LightData,
+} from "../Data/Data";
 
 const DashboardPage = () => {
   const [selectedItem, setSelectedItem] = useState("Dashboard");
@@ -34,9 +42,36 @@ const DashboardPage = () => {
         <Navbar isOpenAppBar={isOpenAppBar} selected={selectedItem} />
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/temperature" element={<TemperatureControl />} />
-          <Route path="/humidity" element="" />
-          <Route path="/light" element="" />
+          <Route
+            path="/temperature"
+            element={
+              <ElementControl
+                options={TemperatureOptions}
+                data={TemperatureData}
+                type="Temperature"
+              />
+            }
+          />
+          <Route
+            path="/humidity"
+            element={
+              <ElementControl
+                options={HumidityOptions}
+                data={HumidityData}
+                type="Humidity"
+              />
+            }
+          />
+          <Route
+            path="/light"
+            element={
+              <ElementControl
+                options={LightOptions}
+                data={LightData}
+                type="Brightness"
+              />
+            }
+          />
         </Routes>
       </main>
     </div>

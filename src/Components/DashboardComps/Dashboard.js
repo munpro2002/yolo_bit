@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Switch, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import classes from "./Dashboard.module.scss";
 import {
   InvertColorsOutlined,
@@ -9,7 +9,7 @@ import {
   ArrowDownward,
   DeviceThermostat,
   Lightbulb,
-  Settings,
+  Water,
 } from "@mui/icons-material";
 
 const Dashboard = () => {
@@ -167,10 +167,24 @@ const Dashboard = () => {
             >
               <Typography style={{ display: "flex", alignItems: "center" }}>
                 <Lightbulb style={{ color: "#F8DF5A", marginRight: "6px" }} />
-                Fan Controller
+                Light Controller
               </Typography>
               <Typography style={{ fontWeight: "bold", color: "red" }}>
                 OFF
+              </Typography>
+            </Box>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography style={{ display: "flex", alignItems: "center" }}>
+                <Water style={{ color: "blue", marginRight: "6px" }} />
+                Water Pump
+              </Typography>
+              <Typography style={{ fontWeight: "bold", color: "green" }}>
+                ON
               </Typography>
             </Box>
           </Box>

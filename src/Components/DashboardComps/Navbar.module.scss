@@ -17,3 +17,43 @@
     gap: 2rem;
   }
 }
+
+.avatar {
+  &:hover {
+    cursor: pointer;
+    border: 4px solid #d4adfc;
+  }
+  background-color: #5c469c !important;
+}
+
+.avatar__config {
+  position: absolute;
+  background-color: #fafafb;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.6);
+  padding: 0.5rem 1rem;
+  width: 300px;
+  top: calc(100% - 6px);
+  right: 50px;
+  border-radius: 4px;
+
+  & h5 {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  & .name {
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid slategray;
+  }
+
+  & .logout {
+    display: flex;
+    margin-top: 0.25rem;
+    padding-inline: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    &:hover {
+      background-color: #d3d3d3;
+    }
+  }
+}

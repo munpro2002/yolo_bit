@@ -7,7 +7,7 @@ const ElementControl = (props) => {
   const statics = props.data.datasets[0].data;
   const maxValue = Math.max(...statics);
   const minValue = Math.min(...statics);
-  const currValue = statics[11];
+  const currValue = statics[0];
 
   return (
     <Box className={classes.container}>
@@ -56,7 +56,7 @@ const ElementControl = (props) => {
                 : props.type === "Humidity"
                 ? "Waterpump"
                 : "Fan"}{" "}
-              status controlling:
+              status:
             </Typography>
             <Box style={{ display: "flex", alignItems: "center" }}>
               <Typography>Off</Typography>

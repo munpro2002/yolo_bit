@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Grid, Typography, Button } from "@mui/material";
 import classes from "./Dashboard.module.scss";
 import {
   InvertColorsOutlined,
@@ -10,9 +10,44 @@ import {
   DeviceThermostat,
   Lightbulb,
   Water,
+  Warning,
+  DeleteForever,
 } from "@mui/icons-material";
+import Modal from "../../UI/Modal";
+import ScheduleForm from "./ScheduleForm";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+  const tempStatics = props.tempData.datasets[0].data;
+  const lightStatics = props.lightData.datasets[0].data;
+  const humStatics = props.humData.datasets[0].data;
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [schedules, setSchedules] = useState([]);
+
+  const closeModalHandler = () => {
+    setIsOpenModal(false);
+  };
+
+  const openModalHandler = () => {
+    setIsOpenModal(true);
+  };
+
+  const addNewScheduleHandler = (schedule) => {
+    console.log(schedule);
+    setSchedules((prev) => [schedule, ...prev]);
+
+    setIsOpenModal(false);
+  };
+
+  const removeScheduleHandler = (id) => {
+    const newSchedules = schedules.filter((sch) => sch.id !== id);
+    setSchedules(newSchedules);
+  };
+
   return (
     <Box className={classes.container}>
       <Typography variant="h1">
@@ -28,17 +63,36 @@ const Dashboard = () => {
             <Box style={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="span">
                 Highest point:{" "}
-                <strong style={{ fontSize: "20px" }}>29°C</strong>
+                <strong style={{ fontSize: "20px" }}>
+                  {Math.max(...tempStatics)}°C
+                </strong>
               </Typography>
               <Typography variant="span">
-                Lowest point: <strong style={{ fontSize: "20px" }}>23°C</strong>
+                Lowest point:{" "}
+                <strong style={{ fontSize: "20px" }}>
+                  {" "}
+                  {Math.min(...tempStatics)}°C
+                </strong>
               </Typography>
             </Box>
             <Box style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography>
-                Current point:{" "}
-                <strong style={{ fontSize: "20px" }}>24°C</strong>
-              </Typography>
+              <Box className={classes["current_value"]}>
+                <Typography>
+                  Current point:{" "}
+                  <strong style={{ fontSize: "20px" }}>
+                    {" "}
+                    {tempStatics[0]}°C
+                  </strong>
+                </Typography>
+                {(tempStatics[0] < 27 || tempStatics[0] > 29) && (
+                  <Warning className={classes["warning"]} />
+                )}
+                <Box className={classes["warning_des"]}>
+                  <Typography>
+                    Not within the appropriate range 27°C-29°C
+                  </Typography>
+                </Box>
+              </Box>
               <Typography
                 style={{
                   textAlign: "center",
@@ -47,13 +101,20 @@ const Dashboard = () => {
                 }}
               >
                 {" "}
-                <ArrowUpward style={{ color: "red", paddingBottom: "2px" }} />
+                {tempStatics[0] - tempStatics[1] >= 0 && (
+                  <ArrowUpward style={{ color: "red", paddingBottom: "2px" }} />
+                )}
+                {tempStatics[0] - tempStatics[1] < 0 && (
+                  <ArrowDownward
+                    style={{ color: "green", paddingBottom: "2px" }}
+                  />
+                )}
                 <strong
                   style={{
                     fontSize: "20px",
                   }}
                 >
-                  2°C
+                  {Math.abs(tempStatics[0] - tempStatics[1])}°C
                 </strong>
                 (last 1h)
               </Typography>
@@ -68,16 +129,36 @@ const Dashboard = () => {
             </Box>
             <Box style={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="span">
-                Highest point: <strong style={{ fontSize: "20px" }}>69%</strong>
+                Highest point:{" "}
+                <strong style={{ fontSize: "20px" }}>
+                  {Math.max(...humStatics)}%
+                </strong>
               </Typography>
               <Typography variant="span">
-                Lowest point: <strong style={{ fontSize: "20px" }}>60%</strong>
+                Lowest point:{" "}
+                <strong style={{ fontSize: "20px" }}>
+                  {Math.min(...humStatics)}%
+                </strong>
               </Typography>
             </Box>
             <Box style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography>
-                Current point: <strong style={{ fontSize: "20px" }}>65%</strong>
-              </Typography>
+              <Box className={classes["current_value"]}>
+                <Typography>
+                  Current point:{" "}
+                  <strong style={{ fontSize: "20px" }}>
+                    {" "}
+                    {humStatics[0]}%
+                  </strong>
+                </Typography>
+                {(humStatics[0] < 45 || humStatics[0] > 65) && (
+                  <Warning className={classes["warning"]} />
+                )}
+                <Box className={classes["warning_des"]}>
+                  <Typography>
+                    Not within the appropriate range 45%-65%
+                  </Typography>
+                </Box>
+              </Box>
               <Typography
                 style={{
                   textAlign: "center",
@@ -86,15 +167,20 @@ const Dashboard = () => {
                 }}
               >
                 {" "}
-                <ArrowDownward
-                  style={{ color: "green", paddingBottom: "2px" }}
-                />
+                {humStatics[0] - humStatics[1] >= 0 && (
+                  <ArrowUpward style={{ color: "red", paddingBottom: "2px" }} />
+                )}
+                {humStatics[0] - humStatics[1] < 0 && (
+                  <ArrowDownward
+                    style={{ color: "green", paddingBottom: "2px" }}
+                  />
+                )}
                 <strong
                   style={{
                     fontSize: "20px",
                   }}
                 >
-                  2%
+                  {Math.abs(humStatics[0] - humStatics[1])}%
                 </strong>
                 (last 1h)
               </Typography>
@@ -109,16 +195,36 @@ const Dashboard = () => {
             </Box>
             <Box style={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="span">
-                Highest point: <strong style={{ fontSize: "20px" }}>40%</strong>
+                Highest point:{" "}
+                <strong style={{ fontSize: "20px" }}>
+                  {Math.max(...lightStatics)}%
+                </strong>
               </Typography>
               <Typography variant="span">
-                Lowest point: <strong style={{ fontSize: "20px" }}>70%</strong>
+                Lowest point:{" "}
+                <strong style={{ fontSize: "20px" }}>
+                  {Math.min(...lightStatics)}%
+                </strong>
               </Typography>
             </Box>
             <Box style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography>
-                Current point: <strong style={{ fontSize: "20px" }}>50%</strong>
-              </Typography>
+              <Box className={classes["current_value"]}>
+                <Typography>
+                  Current point:{" "}
+                  <strong style={{ fontSize: "20px" }}>
+                    {" "}
+                    {lightStatics[0]}%
+                  </strong>
+                </Typography>
+                {(lightStatics[0] < 40 || lightStatics[0] > 70) && (
+                  <Warning className={classes["warning"]} />
+                )}
+                <Box className={classes["warning_des"]}>
+                  <Typography>
+                    Not within the appropriate range 40%-70%
+                  </Typography>
+                </Box>
+              </Box>
               <Typography
                 style={{
                   textAlign: "center",
@@ -127,13 +233,20 @@ const Dashboard = () => {
                 }}
               >
                 {" "}
-                <ArrowUpward style={{ color: "red", paddingBottom: "2px" }} />
+                {lightStatics[0] - lightStatics[1] >= 0 && (
+                  <ArrowUpward style={{ color: "red", paddingBottom: "2px" }} />
+                )}
+                {lightStatics[0] - lightStatics[1] < 0 && (
+                  <ArrowDownward
+                    style={{ color: "green", paddingBottom: "2px" }}
+                  />
+                )}
                 <strong
                   style={{
                     fontSize: "20px",
                   }}
                 >
-                  10%
+                  {Math.abs(lightStatics[0] - lightStatics[1])}%
                 </strong>
                 (last 1h)
               </Typography>
@@ -189,6 +302,59 @@ const Dashboard = () => {
             </Box>
           </Box>
         </Grid>
+
+        <Grid className={classes["schedule_header"]} item xs={11}>
+          <Typography variant="h3">Schedules</Typography>
+          <Button onClick={openModalHandler}>Add new</Button>
+        </Grid>
+        {isOpenModal && (
+          <Modal onCloseModal={closeModalHandler}>
+            <ScheduleForm
+              onAddNewSchedule={addNewScheduleHandler}
+              onCloseModal={closeModalHandler}
+            />
+          </Modal>
+        )}
+        {schedules.length === 0 && (
+          <Typography
+            style={{
+              fontSize: "1.5rem",
+              color: "slategray",
+              marginTop: "1.5rem",
+            }}
+          >
+            No tasks at the moment
+          </Typography>
+        )}
+        {schedules.length !== 0 &&
+          schedules.map((schedule) => (
+            <Grid
+              key={schedule.id}
+              className={classes["schedule_item"]}
+              item
+              xs={11}
+              lg={5}
+            >
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DateTimePicker"]}>
+                  <DateTimePicker defaultValue={schedule.time} />
+                </DemoContainer>
+              </LocalizationProvider>
+              <Typography style={{ marginTop: "4px" }}>
+                {schedule.task === 1
+                  ? "Turn on/off the light controller"
+                  : schedule.task === 2
+                  ? "Turn on/off the waterpump"
+                  : "Turn on/off the temperature controller"}
+              </Typography>
+              <Box style={{ textAlign: "right" }}>
+                <DeleteForever
+                  onClick={removeScheduleHandler.bind(null, schedule.id)}
+                  style={{ cursor: "pointer", color: "red" }}
+                />
+              </Box>
+            </Grid>
+          ))}
       </Grid>
     </Box>
   );

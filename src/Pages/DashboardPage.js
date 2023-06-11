@@ -41,7 +41,16 @@ const DashboardPage = () => {
       >
         <Navbar isOpenAppBar={isOpenAppBar} selected={selectedItem} />
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route
+            path="/"
+            element={
+              <Dashboard
+                tempData={TemperatureData}
+                humData={HumidityData}
+                lightData={LightData}
+              />
+            }
+          />
           <Route
             path="/temperature"
             element={

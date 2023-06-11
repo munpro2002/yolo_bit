@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Paper,
@@ -19,10 +19,15 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   const formSubmitHanlder = (e) => {
     e.preventDefault();
-    navigate("/dashboard");
+
+    if (password === "1234" && email === "an.nguyen.tdn@gmail.com") {
+      navigate("/dashboard");
+    } else alert("Please enter correct password and email address");
   };
 
   return (
@@ -85,6 +90,9 @@ const Login = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
             <TextField
               margin="normal"
@@ -95,6 +103,9 @@ const Login = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
             <Grid
               sx={{
